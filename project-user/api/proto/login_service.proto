@@ -1,0 +1,15 @@
+syntax = "proto3";
+package login.service.v1;
+option go_package = "project-user/pkg/service/login.service.v1";
+// protoc --go_out=./gen --go_opt=paths=source_relative --go-grpc_out=./gen --go-grpc_opt=paths=source_relative  login_service.proto
+message CaptchaMessage {
+  string mobile = 1;
+}
+
+message CaptchaResponse {
+  string code = 1;
+}
+
+service LoginService {
+  rpc GetCaptcha(CaptchaMessage) returns (CaptchaResponse) {}
+}
