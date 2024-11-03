@@ -3,10 +3,10 @@ package user
 import (
 	"mirey7/project-api/config"
 	"mirey7/project-common/discovery"
-	loginServiceV1 "mirey7/project-user/pkg/service/login.service.v1"
+	"mirey7/project-grpc/user/login"
 )
 
-var LoginServiceClient loginServiceV1.LoginServiceClient
+var LoginServiceClient login.LoginServiceClient
 
 func InitRpcUserClient() {
 
@@ -18,5 +18,5 @@ func InitRpcUserClient() {
 	etcdV3Client := discovery.New(config.C.EC.Addr, config.C.EC.UserName, config.C.EC.Password, config.C.EC.DialTime)
 
 	conn := etcdV3Client.InitRoundRobinGrpcConn(config.C.GC.UserName)
-	LoginServiceClient = loginServiceV1.NewLoginServiceClient(conn)
+	LoginServiceClient = login.NewLoginServiceClient(conn)
 }

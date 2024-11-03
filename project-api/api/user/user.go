@@ -3,9 +3,11 @@ package user
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
+	"mirey7/project-api/pkg/model/user"
 	common "mirey7/project-common"
 	"mirey7/project-common/errs"
-	loginServiceV1 "mirey7/project-user/pkg/service/login.service.v1"
+	"mirey7/project-grpc/user/login"
 	"net/http"
 	"time"
 )
@@ -22,7 +24,7 @@ func (*HandlerUser) getCaptcha(ctx *gin.Context) {
 	mobile := ctx.PostForm("mobile")
 	c, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	resp, err := LoginServiceClient.GetCaptcha(c, &loginServiceV1.CaptchaMessage{Mobile: mobile})
+	resp, err := LoginServiceClient.GetCaptcha(c, &login.CaptchaMessage{Mobile: mobile})
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
 		ctx.JSON(http.StatusOK, result.Fail(code, msg))
@@ -31,4 +33,41 @@ func (*HandlerUser) getCaptcha(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, result.Success(resp.Code))
 
+}
+
+func (*HandlerUser) register(c *gin.Context) {
+	// 1. 接收参数 参数模型
+	result := &common.Result{}
+	req := &user.RegisterReq{}
+	err := c.ShouldBind(req)
+	if err != nil {
+		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "参数格式有误"))
+		return
+	}
+
+	// 2. 校验参数
+	if err := req.Verify(); err != nil {
+		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, err.Error()))
+		return
+	}
+
+	// 3. 调用 user grpc服务 获取响应
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	msg := &login.RegisterMessage{}
+	err = copier.Copy(msg, req)
+	if err != nil {
+		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "copy 有误"))
+		return
+	}
+
+	_, err = LoginServiceClient.Register(ctx, msg)
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+	// 4. 返回结果
+	c.JSON(http.StatusOK, result.Success(""))
 }

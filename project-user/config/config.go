@@ -19,6 +19,15 @@ type Config struct {
 	SC    *ServerConfig
 	GC    *GrpcConfig
 	EC    *EtcdConfig
+	MC    *MysqlConfig
+}
+
+type MysqlConfig struct {
+	UserName string
+	Password string
+	Host     string
+	Port     int
+	Db       string
 }
 
 type EtcdConfig struct {
@@ -58,7 +67,18 @@ func InitConfig() *Config {
 	conf.InitZapLog()
 	conf.ReadGrpcConfig()
 	conf.ReadEtcdConfig()
+	conf.ReadMysqlConfig()
 	return conf
+}
+
+func (c *Config) ReadMysqlConfig() {
+	mc := &MysqlConfig{}
+	mc.UserName = c.viper.GetString("mysql.username")
+	mc.Password = c.viper.GetString("mysql.password")
+	mc.Host = c.viper.GetString("mysql.host")
+	mc.Port = c.viper.GetInt("mysql.port")
+	mc.Db = c.viper.GetString("mysql.db")
+	c.MC = mc
 }
 
 func (c *Config) ReadServerConfig() {

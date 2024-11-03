@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"mirey7/project-common/discovery"
+	"mirey7/project-grpc/user/login"
 	"mirey7/project-user/config"
 	loginServiceV1 "mirey7/project-user/pkg/service/login.service.v1"
 	"net"
@@ -70,7 +71,7 @@ func ServerRegisterAndRun() {
 	c := gRPCConfig{
 		Addr: config.C.GC.Addr,
 		RegisterFun: func(g *grpc.Server) {
-			loginServiceV1.RegisterLoginServiceServer(g, loginServiceV1.New())
+			login.RegisterLoginServiceServer(g, loginServiceV1.New())
 		},
 	}
 	s := grpc.NewServer()
