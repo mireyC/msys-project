@@ -216,3 +216,14 @@
 {"level":"INFO","time":"2024-11-03T16:49:41.216+0800","caller":"login.service.v1/login_service.go:40","msg":"短信平台调用成功，发送短信"}
 {"level":"INFO","time":"2024-11-03T16:49:44.489+0800","caller":"login.service.v1/login_service.go:40","msg":"短信平台调用成功，发送短信"}
 {"level":"INFO","time":"2024-11-03T16:49:45.980+0800","caller":"login.service.v1/login_service.go:40","msg":"短信平台调用成功，发送短信"}
+{"level":"ERROR","time":"2024-11-04T01:58:21.941+0800","caller":"login.service.v1/login_service.go:109","msg":"register SaveOrganization db err","error":"Error 1406 (22001): Data too long for column 'avatar' at row 1"}
+{"level":"ERROR","time":"2024-11-06T19:15:31.668+0800","caller":"login.service.v1/login_service.go:47","msg":"Register redis get error ","error":"dial tcp [::1]:6381: connectex: No connection could be made because the target machine actively refused it."}
+{"level":"ERROR","time":"2024-11-06T21:14:42.294+0800","caller":"login.service.v1/login_service.go:148","msg":"Put redis Captcha error ","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-06T21:25:52.230+0800","caller":"login.service.v1/login_service.go:102","msg":"db SaveMember error ","error":"sql: transaction has already been committed or rolled back"}
+{"level":"ERROR","time":"2024-11-06T21:26:10.292+0800","caller":"login.service.v1/login_service.go:102","msg":"db SaveMember error ","error":"sql: transaction has already been committed or rolled back"}
+{"level":"ERROR","time":"2024-11-06T21:27:10.454+0800","caller":"login.service.v1/login_service.go:102","msg":"db SaveMember error ","error":"sql: transaction has already been committed or rolled back; sql: transaction has already been committed or rolled back"}
+{"level":"ERROR","time":"2024-11-06T21:46:03.978+0800","caller":"login.service.v1/login_service.go:102","msg":"register SaveMember db error ","error":"sql: transaction has already been committed or rolled back"}
+{"level":"ERROR","time":"2024-11-06T21:46:51.029+0800","caller":"login.service.v1/login_service.go:102","msg":"register SaveMember db error ","error":"sql: transaction has already been committed or rolled back"}
+{"level":"ERROR","time":"2024-11-06T21:54:10.482+0800","caller":"login.service.v1/login_service.go:116","msg":"register SaveOrganization db err","error":"Error 1406 (22001): Data too long for column 'avatar' at row 1"}
+{"level":"ERROR","time":"2024-11-06T21:55:53.240+0800","caller":"login.service.v1/login_service.go:116","msg":"register SaveOrganization db err","error":"Error 1406 (22001): Data too long for column 'avatar' at row 1"}
+{"level":"ERROR","time":"2024-11-07T06:17:39.573+0800","caller":"login.service.v1/login_service.go:165","msg":"Login db FindMember error","error":"invalid value, should be pointer to struct or slice"}
