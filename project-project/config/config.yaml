@@ -1,0 +1,43 @@
+server:
+  name: "project-project"
+  addr: "127.0.0.1:8081"
+
+zap:
+  debugFileName: "D:\\Go\\msys-project\\logs\\debug\\project-debug.log"
+  infoFileName: "D:\\Go\\msys-project\\logs\\info\\project-info.log"
+  warnFileName: "D:\\Go\\msys-project\\logs\\error\\project-error.log"
+  maxSize: 500,
+  maxAge: 28,
+  maxBackups: 3
+
+redis:
+  host: "120.26.242.2"
+  port: 2377
+  password: "mirey7/A"
+  db: 0
+
+grpc:
+  name: "project"
+  port: ":8882"
+  weight: 10
+
+
+etcd:
+  addr: "120.26.242.2:2379"
+  userName: "root"
+  password: "mirey7/A"
+  dialTime: 5
+
+
+mysql:
+  username: root
+  password: 123456
+  host: 127.0.0.1
+  port: 3306
+  db: msys-project
+
+jwt:
+  accessExp: 1
+  refreshExp: 14
+  accessSecret: msys-project
+  refreshSecret: msys_project

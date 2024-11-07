@@ -41,7 +41,7 @@ func New() *LoginService {
 }
 
 func (ls *LoginService) Register(ctx context.Context, msg *login.RegisterMessage) (*login.RegisterResponse, error) {
-	log.Printf("msg %v \n", msg)
+	//log.Printf("msg %v \n", msg)
 	// 1. 获取参数，校验参数
 	c := context.Background()
 	redisCode, err := ls.cacheRepo.Get(c, model.RegisterRedisKey+msg.Mobile)
@@ -97,6 +97,11 @@ func (ls *LoginService) Register(ctx context.Context, msg *login.RegisterMessage
 		LastLoginTime: time.Now().UnixMilli(),
 		Status:        model.Normal,
 	}
+
+	log.Println("Register password", msg.Password)
+	// 1.去数据库查询 账号密码是否正确
+	//pwd := encrypts.Md5(msg.Password)
+	log.Println("Register password", pwd)
 
 	err = ls.transaction.Action(func(conn database.DBConn) error {
 
@@ -160,8 +165,10 @@ func (ls *LoginService) GetCaptcha(ctx context.Context, msg *login.CaptchaMessag
 
 func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*login.LoginResponse, error) {
 	c := context.Background()
+	log.Println("Login password", msg.Password)
 	// 1.去数据库查询 账号密码是否正确
 	pwd := encrypts.Md5(msg.Password)
+	log.Println("Login password", pwd)
 	mem, err := ls.memberRepo.FindMember(c, msg.Account, pwd)
 	if err != nil {
 		zap.L().Error("Login db FindMember error", zap.Error(err))
@@ -173,6 +180,8 @@ func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*lo
 
 	memMessage := &login.MemberMessage{}
 	err = copier.Copy(memMessage, mem)
+	memMessage.Code, _ = encrypts.EncryptInt64(mem.Id, model.AESKey)
+	//memMessage.Code = str
 	// 2.根据用户id 查询组织
 	orgs, err := ls.organizationRepo.FindOrganizationByMenId(c, mem.Id)
 	if err != nil {
@@ -185,6 +194,10 @@ func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*lo
 
 	var orgsMessage []*login.OrganizationMessage
 	err = copier.Copy(&orgsMessage, &orgs)
+	for _, v := range orgsMessage {
+		v.Code, _ = encrypts.EncryptInt64(v.Id, model.AESKey)
+	}
+
 	// 3.用 jwt 生成 token
 	memId := strconv.FormatInt(mem.Id, 10)
 	exp := time.Duration(config.C.JC.AccessExp*3600*24) * time.Second

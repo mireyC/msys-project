@@ -133,9 +133,10 @@ func (c *EtcdClient) InitRoundRobinGrpcConn(serviceName string) *grpc.ClientConn
 `
 	target := fmt.Sprintf("etcd:///service/%s", serviceName)
 	// 修改 grpc.Dial 的调用，添加拦截器
+	log.Printf("grpc client dial on %s \n", target)
 	cc, err := grpc.Dial(target,
 		grpc.WithResolvers(bd),
-		grpc.WithDefaultServiceConfig(svcCfg),
+		grpc.WithDefaultServiceConfig(svcCfg),         // 添加负载均衡
 		grpc.WithUnaryInterceptor(loggingInterceptor), // 添加拦截器
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 

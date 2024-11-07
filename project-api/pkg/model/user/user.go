@@ -36,7 +36,7 @@ func (r *RegisterReq) Verify() error {
 
 type LoginReq struct {
 	Account  string `json:"account" form:"account"`
-	Password string `json:"password" form:"account"`
+	Password string `json:"password" form:"password"`
 }
 
 type LoginRsp struct {
@@ -46,10 +46,11 @@ type LoginRsp struct {
 }
 
 type Member struct {
-	Id     int64  `json:"id"`
+	//Id     int64  `json:"id"`
 	Name   string `json:"name"`
 	Mobile string `json:"mobile"`
 	Status int    `json:"status"`
+	Code   string `json:"code"` // id->加密
 }
 
 type TokenList struct {
@@ -60,7 +61,7 @@ type TokenList struct {
 }
 
 type OrganizationList struct {
-	Id          int64  `json:"id"`
+	//Id          int64  `json:"id"`
 	Name        string `json:"name"`
 	Avatar      string `json:"avatar"`
 	Description string `json:"description"`
@@ -71,4 +72,5 @@ type OrganizationList struct {
 	Province    int32  `json:"province"`
 	City        int32  `json:"city"`
 	Area        int32  `json:"area"`
+	Code        string `json:"code"` // id->加密
 }

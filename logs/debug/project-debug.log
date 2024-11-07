@@ -228,3 +228,6 @@
 {"level":"ERROR","time":"2024-11-06T21:54:10.482+0800","caller":"login.service.v1/login_service.go:116","msg":"register SaveOrganization db err","error":"Error 1406 (22001): Data too long for column 'avatar' at row 1"}
 {"level":"ERROR","time":"2024-11-06T21:55:53.240+0800","caller":"login.service.v1/login_service.go:116","msg":"register SaveOrganization db err","error":"Error 1406 (22001): Data too long for column 'avatar' at row 1"}
 {"level":"ERROR","time":"2024-11-07T06:17:39.573+0800","caller":"login.service.v1/login_service.go:165","msg":"Login db FindMember error","error":"invalid value, should be pointer to struct or slice"}
+{"level":"INFO","time":"2024-11-08T01:43:41.565+0800","caller":"discovery/server.go:137","msg":"grpc client dial on %s"}
+{"level":"INFO","time":"2024-11-08T01:46:04.722+0800","caller":"discovery/server.go:137","msg":"grpc client dial on %s"}
+{"level":"INFO","time":"2024-11-08T01:46:04.973+0800","caller":"discovery/server.go:137","msg":"grpc client dial on %s"}

@@ -22,7 +22,8 @@ type ServerConfig struct {
 }
 
 type GrpcConfig struct {
-	UserName string
+	UserService    string
+	ProjectService string
 }
 
 type EtcdConfig struct {
@@ -61,7 +62,8 @@ func (c *Config) ReadServerConfig() {
 
 func (c *Config) ReadGrpcConfig() {
 	gc := &GrpcConfig{}
-	gc.UserName = c.viper.GetString("grpc.userName")
+	gc.UserService = c.viper.GetString("grpc.userService")
+	gc.ProjectService = c.viper.GetString("grpc.projectService")
 	c.GC = gc
 }
 
