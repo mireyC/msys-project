@@ -231,3 +231,12 @@
 {"level":"INFO","time":"2024-11-08T01:43:41.565+0800","caller":"discovery/server.go:137","msg":"grpc client dial on %s"}
 {"level":"INFO","time":"2024-11-08T01:46:04.722+0800","caller":"discovery/server.go:137","msg":"grpc client dial on %s"}
 {"level":"INFO","time":"2024-11-08T01:46:04.973+0800","caller":"discovery/server.go:137","msg":"grpc client dial on %s"}
+{"level":"ERROR","time":"2024-11-09T15:53:12.011+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T15:53:25.874+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T15:53:32.959+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T15:53:48.624+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T15:55:13.951+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T15:58:18.340+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T16:09:38.173+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T16:19:05.529+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-09T16:20:17.082+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}

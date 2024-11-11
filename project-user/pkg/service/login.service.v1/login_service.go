@@ -216,3 +216,33 @@ func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*lo
 		TokenList:        tokenList,
 	}, nil
 }
+
+func (ls *LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage) (*login.LoginResponse, error) {
+	token := msg.Token
+	if token == "" {
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	parseToken, err := jwts.ParseJwt(token, config.C.JC.AccessSecret)
+	if err != nil {
+		zap.L().Error("TokenVerify ParseToken err", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	memId, err := strconv.ParseInt(parseToken, 10, 64)
+	if err != nil {
+		zap.L().Error("TokenVerify ParseInt err", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	c := context.Background()
+	mem, err := ls.memberRepo.FindMemberById(c, memId)
+	if err != nil {
+		zap.L().Error("Login db FindMemberById error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+	if mem == nil {
+		zap.L().Error("TokenVerify member is nil")
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	memMsg := &login.MemberMessage{}
+	_ = copier.Copy(memMsg, mem)
+	return &login.LoginResponse{Member: memMsg}, nil
+}

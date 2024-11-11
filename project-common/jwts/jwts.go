@@ -1,9 +1,11 @@
 package jwts
 
 import (
+	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -39,7 +41,11 @@ func CreateToken(val string, exp, refreshExp time.Duration, secret, refreshSecre
 	}
 }
 
-func ParseJwt(tokenString string, secret string) {
+func ParseJwt(tokenString string, secret string) (string, error) {
+	if !strings.HasPrefix(tokenString, "bearer") {
+		return "", errors.New("token不合法")
+	}
+	tokenString = tokenString[7:]
 	// sample token string taken from the New example
 	//tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJuYmYiOjE0NDQ0Nzg0MDB9.u1riaD1rW97opCoAuRCTy4w58Br-Zk-bh7vLiRIsrpU"
 
@@ -57,12 +63,26 @@ func ParseJwt(tokenString string, secret string) {
 		return []byte(secret), nil
 	})
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		fmt.Printf("%v \n", claims)
-	} else {
-		fmt.Println(err)
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		log.Printf("%v", claims)
+		token := claims["token"].(string)
+		// 提取并转换 exp 字段
+		expFloat, ok := claims["exp"].(float64)
+		if !ok {
+			return "", errors.New("exp字段缺失或类型错误")
+		}
+		exp := int64(expFloat)
+
+		// 检查 token 是否过期
+		if exp <= time.Now().Unix() {
+			return "", errors.New("token已过期")
+		}
+		return token, nil
+
 	}
+
+	return "", err
 }

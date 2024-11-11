@@ -12,4 +12,5 @@ type MemberRepo interface {
 	GetMemberByAccount(ctx context.Context, account string) (bool, error)
 	SaveMember(conn database.DBConn, ctx context.Context, mem *member.Member) error
 	FindMember(ctx context.Context, account string, password string) (*member.Member, error)
+	FindMemberById(ctx context.Context, id int64) (*member.Member, error)
 }

@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	ProjectService_Index_FullMethodName = "/project.service.v1.ProjectService/Index"
+	ProjectService_Index_FullMethodName              = "/project.service.v1.ProjectService/Index"
+	ProjectService_FindProjectByMemId_FullMethodName = "/project.service.v1.ProjectService/FindProjectByMemId"
 )
 
 // ProjectServiceClient is the client API for ProjectService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProjectServiceClient interface {
 	Index(ctx context.Context, in *IndexMessage, opts ...grpc.CallOption) (*IndexResponse, error)
+	FindProjectByMemId(ctx context.Context, in *ProjectRpcMessage, opts ...grpc.CallOption) (*ProjectRpcResponse, error)
 }
 
 type projectServiceClient struct {
@@ -47,11 +49,22 @@ func (c *projectServiceClient) Index(ctx context.Context, in *IndexMessage, opts
 	return out, nil
 }
 
+func (c *projectServiceClient) FindProjectByMemId(ctx context.Context, in *ProjectRpcMessage, opts ...grpc.CallOption) (*ProjectRpcResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProjectRpcResponse)
+	err := c.cc.Invoke(ctx, ProjectService_FindProjectByMemId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProjectServiceServer is the server API for ProjectService service.
 // All implementations must embed UnimplementedProjectServiceServer
 // for forward compatibility
 type ProjectServiceServer interface {
 	Index(context.Context, *IndexMessage) (*IndexResponse, error)
+	FindProjectByMemId(context.Context, *ProjectRpcMessage) (*ProjectRpcResponse, error)
 	mustEmbedUnimplementedProjectServiceServer()
 }
 
@@ -61,6 +74,9 @@ type UnimplementedProjectServiceServer struct {
 
 func (UnimplementedProjectServiceServer) Index(context.Context, *IndexMessage) (*IndexResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Index not implemented")
+}
+func (UnimplementedProjectServiceServer) FindProjectByMemId(context.Context, *ProjectRpcMessage) (*ProjectRpcResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindProjectByMemId not implemented")
 }
 func (UnimplementedProjectServiceServer) mustEmbedUnimplementedProjectServiceServer() {}
 
@@ -93,6 +109,24 @@ func _ProjectService_Index_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProjectService_FindProjectByMemId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProjectRpcMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).FindProjectByMemId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProjectService_FindProjectByMemId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).FindProjectByMemId(ctx, req.(*ProjectRpcMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProjectService_ServiceDesc is the grpc.ServiceDesc for ProjectService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -103,6 +137,10 @@ var ProjectService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Index",
 			Handler:    _ProjectService_Index_Handler,
+		},
+		{
+			MethodName: "FindProjectByMemId",
+			Handler:    _ProjectService_FindProjectByMemId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

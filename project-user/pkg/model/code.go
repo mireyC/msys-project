@@ -15,4 +15,5 @@ var (
 	CaptchaNoExist      = errs.NewError(102006, "验证码不存在或已过期 ")
 	AccountAndPwdError  = errs.NewError(102007, "账号密码不正确")
 	OrganizationNoFound = errs.NewError(102008, "组织查询不到")
+	NoLogin             = errs.NewError(102009, "未登录")
 )
