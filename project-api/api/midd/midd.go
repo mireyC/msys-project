@@ -29,6 +29,7 @@ func TokenVerify() func(*gin.Context) {
 
 		// 3. 处理结果， 认证通过  将信息放入上下文， 失败返回未登录
 		c.Set("memberId", member.Id)
+		c.Set("memberName", member.Name)
 		c.Next()
 	}
 }

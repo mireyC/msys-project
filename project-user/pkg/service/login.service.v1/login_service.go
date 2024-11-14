@@ -10,6 +10,7 @@ import (
 	"mirey7/project-common/encrypts"
 	"mirey7/project-common/errs"
 	"mirey7/project-common/jwts"
+	"mirey7/project-common/tms"
 	"mirey7/project-grpc/user/login"
 	"mirey7/project-user/config"
 	"mirey7/project-user/internal/dao"
@@ -178,24 +179,24 @@ func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*lo
 		return nil, errs.GrpcError(model.AccountAndPwdError)
 	}
 
-	memMessage := &login.MemberMessage{}
-	err = copier.Copy(memMessage, mem)
-	memMessage.Code, _ = encrypts.EncryptInt64(mem.Id, model.AESKey)
-	//memMessage.Code = str
+	memMsg := &login.MemberMessage{}
+	err = copier.Copy(memMsg, mem)
+	memIdStr := strconv.FormatInt(mem.Id, 10)
+	memMsg.Code, _ = encrypts.Encrypt(memIdStr, model.AESKey)
+	memMsg.LastLoginTime = tms.FormatByMill(mem.LastLoginTime)
 	// 2.根据用户id 查询组织
 	orgs, err := ls.organizationRepo.FindOrganizationByMenId(c, mem.Id)
 	if err != nil {
-		zap.L().Error("Login db FindOrganizationByMenId error", zap.Error(err))
+		zap.L().Error("Login db FindMember error", zap.Error(err))
 		return nil, errs.GrpcError(model.DBError)
 	}
-	if orgs == nil {
-		return nil, errs.GrpcError(model.OrganizationNoFound)
-	}
-
 	var orgsMessage []*login.OrganizationMessage
-	err = copier.Copy(&orgsMessage, &orgs)
-	for _, v := range orgsMessage {
-		v.Code, _ = encrypts.EncryptInt64(v.Id, model.AESKey)
+	orgMap := organization.ToMap(orgs)
+	err = copier.Copy(&orgsMessage, orgs)
+	for _, org := range orgsMessage {
+		org.Code, _ = encrypts.EncryptInt64(org.Id, model.AESKey)
+		org.OwnerCode = memMsg.Code
+		org.CreateTime = tms.FormatByMill(orgMap[org.Id].CreateTime)
 	}
 
 	// 3.用 jwt 生成 token
@@ -211,7 +212,7 @@ func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*lo
 	}
 
 	return &login.LoginResponse{
-		Member:           memMessage,
+		Member:           memMsg,
 		OrganizationList: orgsMessage,
 		TokenList:        tokenList,
 	}, nil

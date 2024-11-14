@@ -17,3 +17,11 @@ type Organization struct {
 func (*Organization) TableName() string {
 	return "ms_organization"
 }
+
+func ToMap(orgs []*Organization) map[int64]*Organization {
+	m := make(map[int64]*Organization)
+	for _, v := range orgs {
+		m[v.Id] = v
+	}
+	return m
+}

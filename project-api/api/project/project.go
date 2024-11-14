@@ -23,26 +23,30 @@ func (p *HandlerProject) Index(c *gin.Context) {
 
 	msg := &project.IndexMessage{}
 	indexResponse, err := ProjectSvcClient.Index(ctx, msg)
-	//log.Println(resp)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
 		c.JSON(http.StatusOK, result.Fail(code, msg))
-		return
 	}
-	//rsp := &project.IndexResponse{}
-	//jsonData, err := protojson.Marshal(indexResponse)
-	c.JSON(http.StatusOK, result.Success(indexResponse.Menus))
+	var menus []*pro.Menu
+	copier.Copy(&menus, indexResponse.Menus)
+	c.JSON(http.StatusOK, result.Success(menus))
 }
 
 func (p *HandlerProject) myProjectList(c *gin.Context) {
 	result := common.Result{}
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	memberIdStr, _ := c.Get("memberId")
+	memberId := c.GetInt64("memberId")
+	memberName := c.GetString("memberName")
 	page := model.Page{}
 	page.Bind(c)
-	memberId := memberIdStr.(int64)
-	msg := &project.ProjectRpcMessage{MemberId: memberId, Page: page.Page, PageSize: page.PageSize}
+	selectBy := c.PostForm("selectBy")
+	msg := &project.ProjectRpcMessage{
+		MemberId:   memberId,
+		MemberName: memberName,
+		Page:       page.Page,
+		PageSize:   page.PageSize,
+		SelectBy:   selectBy}
 	projectRpcResponse, err := ProjectSvcClient.FindProjectByMemId(ctx, msg)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)

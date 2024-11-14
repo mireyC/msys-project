@@ -12,9 +12,9 @@ type MenuDao struct {
 }
 
 func (m *MenuDao) FindMenus(ctx context.Context) ([]*menu.ProjectMenu, error) {
-	menus := []*menu.ProjectMenu{}
-	err := m.conn.Session(ctx).Find(&menus).Error
-	return menus, err
+	var pms []*menu.ProjectMenu
+	err := m.conn.Session(ctx).Order("pid,sort asc, id asc").Find(&pms).Error
+	return pms, err
 }
 
 func NewMenuDao() *MenuDao {

@@ -240,3 +240,4 @@
 {"level":"ERROR","time":"2024-11-09T16:09:38.173+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
 {"level":"ERROR","time":"2024-11-09T16:19:05.529+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
 {"level":"ERROR","time":"2024-11-09T16:20:17.082+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
+{"level":"ERROR","time":"2024-11-13T13:45:20.294+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"Token is expired"}
