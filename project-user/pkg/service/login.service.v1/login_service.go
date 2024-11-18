@@ -243,7 +243,23 @@ func (ls *LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage
 		zap.L().Error("TokenVerify member is nil")
 		return nil, errs.GrpcError(model.NoLogin)
 	}
+
+	// 2.根据用户id 查询组织
+	orgs, err := ls.organizationRepo.FindOrganizationByMenId(c, mem.Id)
+	if err != nil {
+		zap.L().Error("Login db FindMember error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+	var orgsMessage []*login.OrganizationMessage
+	orgMap := organization.ToMap(orgs)
+	err = copier.Copy(&orgsMessage, orgs)
+	for _, org := range orgsMessage {
+		org.Code, _ = encrypts.EncryptInt64(org.Id, model.AESKey)
+		org.OwnerCode = string(mem.Id)
+		org.CreateTime = tms.FormatByMill(orgMap[org.Id].CreateTime)
+	}
+
 	memMsg := &login.MemberMessage{}
 	_ = copier.Copy(memMsg, mem)
-	return &login.LoginResponse{Member: memMsg}, nil
+	return &login.LoginResponse{Member: memMsg, OrganizationList: orgsMessage}, nil
 }

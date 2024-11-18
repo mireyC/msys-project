@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	ProjectService_Index_FullMethodName              = "/project.service.v1.ProjectService/Index"
-	ProjectService_FindProjectByMemId_FullMethodName = "/project.service.v1.ProjectService/FindProjectByMemId"
+	ProjectService_Index_FullMethodName                   = "/project.service.v1.ProjectService/Index"
+	ProjectService_FindProjectByMemId_FullMethodName      = "/project.service.v1.ProjectService/FindProjectByMemId"
+	ProjectService_FindProjectTemplateList_FullMethodName = "/project.service.v1.ProjectService/FindProjectTemplateList"
 )
 
 // ProjectServiceClient is the client API for ProjectService service.
@@ -29,6 +30,7 @@ const (
 type ProjectServiceClient interface {
 	Index(ctx context.Context, in *IndexMessage, opts ...grpc.CallOption) (*IndexResponse, error)
 	FindProjectByMemId(ctx context.Context, in *ProjectRpcMessage, opts ...grpc.CallOption) (*ProjectRpcResponse, error)
+	FindProjectTemplateList(ctx context.Context, in *ProjectTemplateMessage, opts ...grpc.CallOption) (*ProjectTemplateResp, error)
 }
 
 type projectServiceClient struct {
@@ -59,12 +61,23 @@ func (c *projectServiceClient) FindProjectByMemId(ctx context.Context, in *Proje
 	return out, nil
 }
 
+func (c *projectServiceClient) FindProjectTemplateList(ctx context.Context, in *ProjectTemplateMessage, opts ...grpc.CallOption) (*ProjectTemplateResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProjectTemplateResp)
+	err := c.cc.Invoke(ctx, ProjectService_FindProjectTemplateList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProjectServiceServer is the server API for ProjectService service.
 // All implementations must embed UnimplementedProjectServiceServer
 // for forward compatibility
 type ProjectServiceServer interface {
 	Index(context.Context, *IndexMessage) (*IndexResponse, error)
 	FindProjectByMemId(context.Context, *ProjectRpcMessage) (*ProjectRpcResponse, error)
+	FindProjectTemplateList(context.Context, *ProjectTemplateMessage) (*ProjectTemplateResp, error)
 	mustEmbedUnimplementedProjectServiceServer()
 }
 
@@ -77,6 +90,9 @@ func (UnimplementedProjectServiceServer) Index(context.Context, *IndexMessage) (
 }
 func (UnimplementedProjectServiceServer) FindProjectByMemId(context.Context, *ProjectRpcMessage) (*ProjectRpcResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindProjectByMemId not implemented")
+}
+func (UnimplementedProjectServiceServer) FindProjectTemplateList(context.Context, *ProjectTemplateMessage) (*ProjectTemplateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindProjectTemplateList not implemented")
 }
 func (UnimplementedProjectServiceServer) mustEmbedUnimplementedProjectServiceServer() {}
 
@@ -127,6 +143,24 @@ func _ProjectService_FindProjectByMemId_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProjectService_FindProjectTemplateList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProjectTemplateMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).FindProjectTemplateList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProjectService_FindProjectTemplateList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).FindProjectTemplateList(ctx, req.(*ProjectTemplateMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProjectService_ServiceDesc is the grpc.ServiceDesc for ProjectService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -141,6 +175,10 @@ var ProjectService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindProjectByMemId",
 			Handler:    _ProjectService_FindProjectByMemId_Handler,
+		},
+		{
+			MethodName: "FindProjectTemplateList",
+			Handler:    _ProjectService_FindProjectTemplateList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

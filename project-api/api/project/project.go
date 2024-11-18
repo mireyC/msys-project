@@ -67,6 +67,38 @@ func (p *HandlerProject) myProjectList(c *gin.Context) {
 	}))
 }
 
+func (p *HandlerProject) projectTemplate(c *gin.Context) {
+	result := common.Result{}
+	//var total int
+	req := &pro.ProjectTemplateQueryReq{}
+	c.ShouldBind(req)
+	//list := []pro.ProjectTemplate{}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	resp, err := ProjectSvcClient.FindProjectTemplateList(ctx, &project.ProjectTemplateMessage{
+		Page:           int64(req.Page),
+		PageSize:       int64(req.PageSize),
+		ViewType:       req.ViewType,
+		MemberId:       c.GetInt64("memberId"),
+		OrganizationId: c.GetInt64("organizationId"),
+	})
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+
+	var list []*pro.ProjectTemplate
+	copier.Copy(&list, resp.Pts)
+	c.JSON(http.StatusOK, result.Success(gin.H{
+		"total": resp.Total,
+		"list":  list,
+		"page":  req.Page,
+	}))
+	return
+}
+
 func New() *HandlerProject {
 	return &HandlerProject{}
 }

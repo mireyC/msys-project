@@ -1,492 +1,717 @@
 {
   "code": 200,
   "msg": "success",
-  "data": {
-    "menus": [
-      {
-        "children": [
-          {
-            "menu": {
-              "id": 120,
-              "title": "工作台",
-              "icon": "appstore-o",
-              "url": "home",
-              "filePath": "home",
-              "params": ":org",
-              "node": "#",
-              "status": 1
+  "data": [
+    {
+      "id": 120,
+      "pid": 0,
+      "title": "工作台",
+      "icon": "appstore-o",
+      "url": "home",
+      "filePath": "home/index",
+      "params": ":org",
+      "node": "#",
+      "sort": 0,
+      "status": 1,
+      "create_by": 0,
+      "is_inner": 0,
+      "values": "",
+      "show_slider": 0,
+      "statusText": "禁用",
+      "innerText": "导航",
+      "fullUrl": "home",
+      "children": []
+    },
+    {
+      "id": 121,
+      "pid": 0,
+      "title": "项目管理",
+      "icon": "project",
+      "url": "#",
+      "filePath": "#",
+      "params": "",
+      "node": "#",
+      "sort": 0,
+      "status": 1,
+      "create_by": 0,
+      "is_inner": 0,
+      "values": "",
+      "show_slider": 1,
+      "statusText": "禁用",
+      "innerText": "导航",
+      "fullUrl": "#",
+      "children": [
+        {
+          "id": 122,
+          "pid": 121,
+          "title": "项目列表",
+          "icon": "branches",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 0,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 0,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 151,
+              "pid": 122,
+              "title": "我的项目",
+              "icon": "",
+              "url": "project/list",
+              "filePath": "project/list",
+              "params": ":type",
+              "node": "project/project/index",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "my",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/list/my",
+              "children": []
+            },
+            {
+              "id": 163,
+              "pid": 122,
+              "title": "项目分析",
+              "icon": "",
+              "url": "project/analysis",
+              "filePath": "project/analysis",
+              "params": "",
+              "node": "project/index/info",
+              "sort": 5,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/analysis",
+              "children": []
+            },
+            {
+              "id": 155,
+              "pid": 122,
+              "title": "我的收藏",
+              "icon": "",
+              "url": "project/list",
+              "filePath": "project/list",
+              "params": ":type",
+              "node": "project/project/index",
+              "sort": 10,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "collect",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/list/collect",
+              "children": []
+            },
+            {
+              "id": 159,
+              "pid": 122,
+              "title": "已归档项目",
+              "icon": "",
+              "url": "project/archive",
+              "filePath": "project/archive",
+              "params": "",
+              "node": "project/project/index",
+              "sort": 10,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/archive",
+              "children": []
+            },
+            {
+              "id": 152,
+              "pid": 122,
+              "title": "回收站",
+              "icon": "",
+              "url": "project/recycle",
+              "filePath": "project/recycle",
+              "params": "",
+              "node": "project/project/index",
+              "sort": 20,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/recycle",
+              "children": []
+            },
+            {
+              "id": 127,
+              "pid": 122,
+              "title": "我的组织",
+              "icon": "",
+              "url": "organization",
+              "filePath": "organization",
+              "params": "",
+              "node": "project/organization/index",
+              "sort": 30,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "organization",
+              "children": []
             }
-          },
-          {
-            "menu": {
-              "id": 121,
-              "title": "项目管理",
-              "icon": "project",
-              "url": "#",
-              "filePath": "#",
-              "node": "#",
+          ]
+        },
+        {
+          "id": 156,
+          "pid": 121,
+          "title": "基础设置",
+          "icon": "experiment",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 0,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 0,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 157,
+              "pid": 156,
+              "title": "项目模板",
+              "icon": "",
+              "url": "project/template",
+              "filePath": "project/template",
+              "params": "",
+              "node": "project/project_template/index",
+              "sort": 0,
               "status": 1,
-              "showSlider": 1
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/template",
+              "children": []
             },
-            "children": [
-              {
-                "menu": {
-                  "id": 122,
-                  "pid": 121,
-                  "title": "项目列表",
-                  "icon": "branches",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "status": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 127,
-                      "pid": 122,
-                      "title": "我的组织",
-                      "url": "organization",
-                      "filePath": "organization",
-                      "node": "project/organization/index",
-                      "sort": 30,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 151,
-                      "pid": 122,
-                      "title": "我的项目",
-                      "url": "project/list",
-                      "filePath": "project/list",
-                      "params": ":type",
-                      "node": "project/project/index",
-                      "status": 1,
-                      "values": "my",
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 152,
-                      "pid": 122,
-                      "title": "回收站",
-                      "url": "project/recycle",
-                      "filePath": "project/recycle",
-                      "node": "project/project/index",
-                      "sort": 20,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 155,
-                      "pid": 122,
-                      "title": "我的收藏",
-                      "url": "project/list",
-                      "filePath": "project/list",
-                      "params": ":type",
-                      "node": "project/project/index",
-                      "sort": 10,
-                      "status": 1,
-                      "values": "collect",
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 159,
-                      "pid": 122,
-                      "title": "已归档项目",
-                      "url": "project/archive",
-                      "filePath": "project/archive",
-                      "node": "project/project/index",
-                      "sort": 10,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 163,
-                      "pid": 122,
-                      "title": "项目分析",
-                      "url": "project/analysis",
-                      "filePath": "project/analysis",
-                      "node": "project/index/info",
-                      "sort": 5,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  }
-                ]
-              },
-              {
-                "menu": {
-                  "id": 138,
-                  "pid": 121,
-                  "title": "消息提醒",
-                  "icon": "info-circle-o",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "sort": 30,
-                  "status": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 139,
-                      "pid": 138,
-                      "title": "站内消息",
-                      "url": "notify/notice",
-                      "filePath": "notify/notice",
-                      "node": "project/notify/index",
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 140,
-                      "pid": 138,
-                      "title": "系统公告",
-                      "url": "notify/system",
-                      "filePath": "notify/system",
-                      "node": "project/notify/index",
-                      "sort": 10,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  }
-                ]
-              },
-              {
-                "menu": {
-                  "id": 153,
-                  "pid": 121,
-                  "title": "项目空间",
-                  "icon": "heat-map",
-                  "url": "project/space/task",
-                  "filePath": "project/space/task",
-                  "params": ":code",
-                  "node": "#",
-                  "sort": 20,
-                  "status": 1,
-                  "isInner": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 154,
-                      "pid": 153,
-                      "title": "任务详情",
-                      "url": "project/space/task/:code/detail",
-                      "filePath": "project/space/taskdetail",
-                      "params": ":code",
-                      "node": "project/task/read",
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 161,
-                      "pid": 153,
-                      "title": "项目概况",
-                      "url": "project/space/overview",
-                      "filePath": "project/space/overview",
-                      "params": ":code",
-                      "node": "project/index/info",
-                      "sort": 20,
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 162,
-                      "pid": 153,
-                      "title": "项目文件",
-                      "url": "project/space/files",
-                      "filePath": "project/space/files",
-                      "params": ":code",
-                      "node": "project/index/info",
-                      "sort": 10,
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 168,
-                      "pid": 153,
-                      "title": "版本管理",
-                      "url": "project/space/features",
-                      "filePath": "project/space/features",
-                      "params": ":code",
-                      "node": "project/index/info",
-                      "sort": 20,
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  }
-                ]
-              },
-              {
-                "menu": {
-                  "id": 156,
-                  "pid": 121,
-                  "title": "基础设置",
-                  "icon": "experiment",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "status": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 157,
-                      "pid": 156,
-                      "title": "项目模板",
-                      "url": "project/template",
-                      "filePath": "project/template",
-                      "node": "project/project_template/index",
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 158,
-                      "pid": 156,
-                      "title": "项目列表模板",
-                      "url": "project/template/taskStages",
-                      "filePath": "project/template/taskStages",
-                      "params": ":code",
-                      "node": "project/task_stages_template/index",
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "menu": {
-              "id": 124,
-              "title": "系统设置",
-              "icon": "setting",
-              "url": "#",
-              "filePath": "#",
-              "node": "#",
-              "sort": 100,
+            {
+              "id": 158,
+              "pid": 156,
+              "title": "项目列表模板",
+              "icon": "",
+              "url": "project/template/taskStages",
+              "filePath": "project/template/taskStages",
+              "params": ":code",
+              "node": "project/task_stages_template/index",
+              "sort": 0,
               "status": 1,
-              "showSlider": 1
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/template/taskStages",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 153,
+          "pid": 121,
+          "title": "项目空间",
+          "icon": "heat-map",
+          "url": "project/space/task",
+          "filePath": "project/space/task",
+          "params": ":code",
+          "node": "#",
+          "sort": 20,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 1,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "project/space/task",
+          "children": [
+            {
+              "id": 154,
+              "pid": 153,
+              "title": "任务详情",
+              "icon": "",
+              "url": "project/space/task/:code/detail",
+              "filePath": "project/space/taskdetail",
+              "params": ":code",
+              "node": "project/task/read",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/space/task/:code/detail",
+              "children": []
             },
-            "children": [
-              {
-                "menu": {
-                  "id": 125,
-                  "pid": 124,
-                  "title": "成员管理",
-                  "icon": "unlock",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "sort": 10,
-                  "status": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 126,
-                      "pid": 125,
-                      "title": "账号列表",
-                      "url": "system/account",
-                      "filePath": "system/account",
-                      "node": "project/account/index",
-                      "sort": 10,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 130,
-                      "pid": 125,
-                      "title": "访问授权",
-                      "url": "system/account/auth",
-                      "filePath": "system/account/auth",
-                      "node": "project/auth/index",
-                      "sort": 20,
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 131,
-                      "pid": 125,
-                      "title": "授权页面",
-                      "url": "system/account/apply",
-                      "filePath": "system/account/apply",
-                      "params": ":id",
-                      "node": "project/auth/apply",
-                      "sort": 30,
-                      "status": 1,
-                      "isInner": 1,
-                      "showSlider": 1
-                    }
-                  }
-                ]
-              },
-              {
-                "menu": {
-                  "id": 143,
-                  "pid": 124,
-                  "title": "系统管理",
-                  "icon": "appstore",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "status": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 144,
-                      "pid": 143,
-                      "title": "菜单路由",
-                      "url": "system/config/menu",
-                      "filePath": "system/config/menu",
-                      "node": "project/menu/menuadd",
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 145,
-                      "pid": 143,
-                      "title": "访问节点",
-                      "url": "system/config/node",
-                      "filePath": "system/config/node",
-                      "node": "project/node/save",
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  }
-                ]
-              },
-              {
-                "menu": {
-                  "id": 148,
-                  "pid": 124,
-                  "title": "个人管理",
-                  "icon": "user",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "status": 1,
-                  "showSlider": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 149,
-                      "pid": 148,
-                      "title": "个人设置",
-                      "url": "account/setting/base",
-                      "filePath": "account/setting/base",
-                      "node": "project/index/editpersonal",
-                      "status": 1,
-                      "showSlider": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 150,
-                      "pid": 148,
-                      "title": "安全设置",
-                      "url": "account/setting/security",
-                      "filePath": "account/setting/security",
-                      "node": "project/index/editpersonal",
-                      "status": 1,
-                      "isInner": 1,
-                      "showSlider": 1
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "menu": {
-              "id": 160,
+            {
+              "id": 162,
+              "pid": 153,
+              "title": "项目文件",
+              "icon": "",
+              "url": "project/space/files",
+              "filePath": "project/space/files",
+              "params": ":code",
+              "node": "project/index/info",
+              "sort": 10,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/space/files",
+              "children": []
+            },
+            {
+              "id": 161,
+              "pid": 153,
+              "title": "项目概况",
+              "icon": "",
+              "url": "project/space/overview",
+              "filePath": "project/space/overview",
+              "params": ":code",
+              "node": "project/index/info",
+              "sort": 20,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/space/overview",
+              "children": []
+            },
+            {
+              "id": 168,
+              "pid": 153,
+              "title": "版本管理",
+              "icon": "",
+              "url": "project/space/features",
+              "filePath": "project/space/features",
+              "params": ":code",
+              "node": "project/index/info",
+              "sort": 20,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "project/space/features",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 138,
+          "pid": 121,
+          "title": "消息提醒",
+          "icon": "info-circle-o",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 30,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 0,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 139,
+              "pid": 138,
+              "title": "站内消息",
+              "icon": "",
+              "url": "notify/notice",
+              "filePath": "notify/notice",
+              "params": "",
+              "node": "project/notify/index",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "notify/notice",
+              "children": []
+            },
+            {
+              "id": 140,
+              "pid": 138,
+              "title": "系统公告",
+              "icon": "",
+              "url": "notify/system",
+              "filePath": "notify/system",
+              "params": "",
+              "node": "project/notify/index",
+              "sort": 10,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "notify/system",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 160,
+      "pid": 0,
+      "title": "团队成员",
+      "icon": "team",
+      "url": "#",
+      "filePath": "#",
+      "params": "",
+      "node": "#",
+      "sort": 0,
+      "status": 1,
+      "create_by": 0,
+      "is_inner": 1,
+      "values": "",
+      "show_slider": 0,
+      "statusText": "禁用",
+      "innerText": "导航",
+      "fullUrl": "#",
+      "children": [
+        {
+          "id": 164,
+          "pid": 160,
+          "title": "团队成员",
+          "icon": "",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 0,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 1,
+          "values": "",
+          "show_slider": 0,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 166,
+              "pid": 164,
               "title": "团队成员",
-              "icon": "team",
-              "url": "#",
-              "filePath": "#",
-              "node": "#",
+              "icon": "",
+              "url": "members",
+              "filePath": "members",
+              "params": "",
+              "node": "project/department/index",
+              "sort": 0,
               "status": 1,
-              "isInner": 1
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "members",
+              "children": []
             },
-            "children": [
-              {
-                "menu": {
-                  "id": 164,
-                  "pid": 160,
-                  "title": "团队成员",
-                  "url": "#",
-                  "filePath": "#",
-                  "node": "#",
-                  "status": 1,
-                  "isInner": 1
-                },
-                "children": [
-                  {
-                    "menu": {
-                      "id": 166,
-                      "pid": 164,
-                      "title": "团队成员",
-                      "url": "members",
-                      "filePath": "members",
-                      "node": "project/department/index",
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  },
-                  {
-                    "menu": {
-                      "id": 167,
-                      "pid": 164,
-                      "title": "成员信息",
-                      "url": "members/profile",
-                      "filePath": "members/profile",
-                      "params": ":code",
-                      "node": "project/department/read",
-                      "status": 1,
-                      "isInner": 1
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+            {
+              "id": 167,
+              "pid": 164,
+              "title": "成员信息",
+              "icon": "",
+              "url": "members/profile",
+              "filePath": "members/profile",
+              "params": ":code",
+              "node": "project/department/read",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 0,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "members/profile",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "pid": 0,
+      "title": "系统设置",
+      "icon": "setting",
+      "url": "#",
+      "filePath": "#",
+      "params": "",
+      "node": "#",
+      "sort": 100,
+      "status": 1,
+      "create_by": 0,
+      "is_inner": 0,
+      "values": "",
+      "show_slider": 1,
+      "statusText": "禁用",
+      "innerText": "导航",
+      "fullUrl": "#",
+      "children": [
+        {
+          "id": 143,
+          "pid": 124,
+          "title": "系统管理",
+          "icon": "appstore",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 0,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 0,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 144,
+              "pid": 143,
+              "title": "菜单路由",
+              "icon": "",
+              "url": "system/config/menu",
+              "filePath": "system/config/menu",
+              "params": "",
+              "node": "project/menu/menuadd",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "system/config/menu",
+              "children": []
+            },
+            {
+              "id": 145,
+              "pid": 143,
+              "title": "访问节点",
+              "icon": "",
+              "url": "system/config/node",
+              "filePath": "system/config/node",
+              "params": "",
+              "node": "project/node/save",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "system/config/node",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 148,
+          "pid": 124,
+          "title": "个人管理",
+          "icon": "user",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 0,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 0,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 149,
+              "pid": 148,
+              "title": "个人设置",
+              "icon": "",
+              "url": "account/setting/base",
+              "filePath": "account/setting/base",
+              "params": "",
+              "node": "project/index/editpersonal",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "account/setting/base",
+              "children": []
+            },
+            {
+              "id": 150,
+              "pid": 148,
+              "title": "安全设置",
+              "icon": "",
+              "url": "account/setting/security",
+              "filePath": "account/setting/security",
+              "params": "",
+              "node": "project/index/editpersonal",
+              "sort": 0,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "account/setting/security",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 125,
+          "pid": 124,
+          "title": "成员管理",
+          "icon": "unlock",
+          "url": "#",
+          "filePath": "#",
+          "params": "",
+          "node": "#",
+          "sort": 10,
+          "status": 1,
+          "create_by": 0,
+          "is_inner": 0,
+          "values": "",
+          "show_slider": 1,
+          "statusText": "禁用",
+          "innerText": "导航",
+          "fullUrl": "#",
+          "children": [
+            {
+              "id": 126,
+              "pid": 125,
+              "title": "账号列表",
+              "icon": "",
+              "url": "system/account",
+              "filePath": "system/account",
+              "params": "",
+              "node": "project/account/index",
+              "sort": 10,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "system/account",
+              "children": []
+            },
+            {
+              "id": 130,
+              "pid": 125,
+              "title": "访问授权",
+              "icon": "",
+              "url": "system/account/auth",
+              "filePath": "system/account/auth",
+              "params": "",
+              "node": "project/auth/index",
+              "sort": 20,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 0,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "system/account/auth",
+              "children": []
+            },
+            {
+              "id": 131,
+              "pid": 125,
+              "title": "授权页面",
+              "icon": "",
+              "url": "system/account/apply",
+              "filePath": "system/account/apply",
+              "params": ":id",
+              "node": "project/auth/apply",
+              "sort": 30,
+              "status": 1,
+              "create_by": 0,
+              "is_inner": 1,
+              "values": "",
+              "show_slider": 1,
+              "statusText": "禁用",
+              "innerText": "导航",
+              "fullUrl": "system/account/apply",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

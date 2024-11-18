@@ -1,5 +1,12 @@
 package pro
 
+import (
+	"mirey7/project-common/encrypts"
+	"mirey7/project-common/tms"
+	"mirey7/project-project/internal/data/task"
+	"mirey7/project-project/pkg/model"
+)
+
 type Project struct {
 	Id                 int64
 	Cover              string
@@ -83,4 +90,63 @@ type CollectionProject struct {
 
 func (*CollectionProject) TableName() string {
 	return "ms_project_collection"
+}
+
+type ProjectTemplate struct {
+	Id               int
+	Name             string
+	Description      string
+	Sort             int
+	CreateTime       int64
+	OrganizationCode int64
+	Cover            string
+	MemberCode       int64
+	IsSystem         int
+}
+
+func (*ProjectTemplate) TableName() string {
+	return "ms_project_template"
+}
+
+type ProjectTemplateAll struct {
+	Id               int
+	Name             string
+	Description      string
+	Sort             int
+	CreateTime       string
+	OrganizationCode string
+	Cover            string
+	MemberCode       string
+	IsSystem         int
+	TaskStages       []*task.TaskStagesOnlyName
+	Code             string
+}
+
+func (pt *ProjectTemplate) Convert(taskStages []*task.TaskStagesOnlyName) *ProjectTemplateAll {
+	organizationCode, _ := encrypts.EncryptInt64(pt.OrganizationCode, model.AESKey)
+	memberCode, _ := encrypts.EncryptInt64(pt.MemberCode, model.AESKey)
+	code, _ := encrypts.EncryptInt64(int64(pt.Id), model.AESKey)
+	pta := &ProjectTemplateAll{
+		Id:               pt.Id,
+		Name:             pt.Name,
+		Description:      pt.Description,
+		Sort:             pt.Sort,
+		CreateTime:       tms.FormatByMill(pt.CreateTime),
+		OrganizationCode: organizationCode,
+		Cover:            pt.Cover,
+		MemberCode:       memberCode,
+		IsSystem:         pt.IsSystem,
+		TaskStages:       taskStages,
+		Code:             code,
+	}
+	return pta
+}
+
+func ToProjectTemplateIds(pts []*ProjectTemplate) []int64 {
+	var ids []int64
+	for _, v := range pts {
+		ids = append(ids, int64(v.Id))
+	}
+
+	return ids
 }

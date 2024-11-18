@@ -20,3 +20,6 @@
 {"level":"ERROR","time":"2024-11-09T16:19:05.529+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
 {"level":"ERROR","time":"2024-11-09T16:20:17.082+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"tokenstring should not contain 'bearer '"}
 {"level":"ERROR","time":"2024-11-13T13:45:20.294+0800","caller":"login.service.v1/login_service.go:227","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-17T23:56:08.122+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-17T23:56:09.301+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-18T01:25:20.427+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}

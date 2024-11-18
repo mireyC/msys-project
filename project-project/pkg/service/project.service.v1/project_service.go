@@ -10,7 +10,9 @@ import (
 	"mirey7/project-grpc/project"
 	"mirey7/project-project/internal/data/menu"
 	"mirey7/project-project/internal/data/pro"
+	"mirey7/project-project/internal/data/task"
 	"mirey7/project-project/pkg/model"
+	"time"
 
 	"mirey7/project-project/internal/dao"
 	"mirey7/project-project/internal/database/tran"
@@ -23,6 +25,7 @@ type ProjectService struct {
 	transaction tran.Transaction
 	menuRepo    repo.MenuRepo
 	projectRepo repo.ProjectRepo
+	taskRepo    repo.TaskRepo
 }
 
 func New() *ProjectService {
@@ -31,6 +34,7 @@ func New() *ProjectService {
 		transaction: dao.NewTransaction(),
 		menuRepo:    dao.NewMenuDao(),
 		projectRepo: dao.NewProjectDao(),
+		taskRepo:    dao.NewTaskDao(),
 	}
 }
 
@@ -113,4 +117,55 @@ func (p *ProjectService) FindProjectByMemId(ctx context.Context, msg *project.Pr
 	}
 
 	return &project.ProjectRpcResponse{Pm: pm, Total: total}, nil
+}
+
+func (p *ProjectService) FindProjectTemplateList(ctx context.Context, msg *project.ProjectTemplateMessage) (*project.ProjectTemplateResp, error) {
+	viewType := msg.ViewType
+	c, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	var pts []*pro.ProjectTemplate
+	var total int64
+	var err error
+	if viewType == "1" { // 系统模板
+		pts, total, err = p.projectRepo.FindProjectTemplateSystem(c, msg.Page, msg.PageSize, 1)
+	}
+
+	if viewType == "0" { // 自定义模板
+		pts, total, err = p.projectRepo.FindProjectTemplateCustom(c, msg.Page, msg.PageSize, msg.OrganizationId, msg.MemberId)
+	}
+
+	if viewType == "-1" { // -1 所有模板
+		pts, total, err = p.projectRepo.FindProjectTemplateAll(c, msg.Page, msg.PageSize, msg.OrganizationId)
+	}
+
+	if err != nil {
+		zap.L().Error("project FindProjectTemplateList db error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	if pts == nil {
+		return &project.ProjectTemplateResp{}, nil
+	}
+
+	ids := pro.ToProjectTemplateIds(pts)
+	//查询task stages数据库
+	taskStages, err := p.taskRepo.FindTaskByIds(c, ids)
+	if err != nil {
+		zap.L().Error("project FindProjectTemplateList FindTaskByIds error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	tm := task.CovertProjectMap(taskStages)
+	var proTemplates []*pro.ProjectTemplateAll
+	for _, v := range pts {
+		proTemplates = append(proTemplates, v.Convert(tm[v.Id]))
+	}
+
+	var proTemplateList []*project.ProjectTemplate
+	copier.Copy(&proTemplateList, proTemplates)
+
+	return &project.ProjectTemplateResp{
+		Pts:   proTemplateList,
+		Total: total,
+	}, nil
 }

@@ -14,7 +14,7 @@ type Organization struct {
 
 func (o *Organization) FindOrganizationByMenId(ctx context.Context, memId int64) ([]*organization.Organization, error) {
 	var orgs []*organization.Organization
-	err := o.conn.Session(ctx).Where("member_id=?", memId).Find(&orgs).Error
+	err := o.conn.Session(ctx).Where("member_id=?", memId).Order("id ASC").Find(&orgs).Error
 	if err == gorm.ErrRecordNotFound {
 		return nil, nil
 	}

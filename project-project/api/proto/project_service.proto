@@ -80,7 +80,37 @@ message ProjectRpcResponse {
   int64 total = 2;
 }
 
+message ProjectTemplateMessage {
+  int64 page = 1;
+  int64 pageSize = 2;
+  string viewType = 3;
+  int64 memberId = 4;
+  int64 organizationId = 5;
+}
+
+message ProjectTemplate {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  int32 sort = 4;
+  string createTime = 5;
+  string organizationCode = 6;
+  string cover = 7;
+  string memberCode = 8;
+  int32 isSystem = 9;
+  repeated TaskStages taskStages = 10;
+  string code = 11;
+}
+message TaskStages{
+  string name = 1;
+}
+message ProjectTemplateResp {
+  repeated ProjectTemplate pts = 1;
+  int64  Total = 2;
+}
+
 service ProjectService {
   rpc Index(IndexMessage) returns (IndexResponse) {}
   rpc FindProjectByMemId(ProjectRpcMessage) returns (ProjectRpcResponse) {}
+  rpc FindProjectTemplateList(ProjectTemplateMessage) returns (ProjectTemplateResp) {}
 }
