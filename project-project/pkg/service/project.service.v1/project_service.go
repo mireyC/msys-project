@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"log"
 	"mirey7/project-common/encrypts"
 	"mirey7/project-common/errs"
 	"mirey7/project-common/tms"
@@ -11,7 +12,9 @@ import (
 	"mirey7/project-project/internal/data/menu"
 	"mirey7/project-project/internal/data/pro"
 	"mirey7/project-project/internal/data/task"
+	"mirey7/project-project/internal/database"
 	"mirey7/project-project/pkg/model"
+	"strconv"
 	"time"
 
 	"mirey7/project-project/internal/dao"
@@ -168,4 +171,91 @@ func (p *ProjectService) FindProjectTemplateList(ctx context.Context, msg *proje
 		Pts:   proTemplateList,
 		Total: total,
 	}, nil
+}
+
+func (ps *ProjectService) SaveProject(ctx context.Context, msg *project.ProjectSaveRpcMessage) (*project.ProjectSaveRespMessage, error) {
+
+	organizationCode, _ := strconv.ParseInt(msg.OrganizationCode, 10, 64)
+	templateCodeStr, _ := encrypts.Decrypt(msg.TemplateCode, model.AESKey)
+	templateCode, _ := strconv.ParseInt(templateCodeStr, 10, 64)
+	pr := &pro.Project{
+		Name:              msg.Name,
+		Description:       msg.Description,
+		TemplateCode:      int(templateCode),
+		CreateTime:        time.Now().UnixMilli(),
+		Cover:             "https://img2.baidu.com/it/u=792555388,2449797505&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500",
+		Deleted:           model.NoDeleted,
+		Archive:           model.NoArchive,
+		OrganizationCode:  organizationCode,
+		AccessControlType: model.Open,
+		TaskBoardTheme:    model.Simple,
+	}
+	var rsp *project.ProjectSaveRespMessage
+	err := ps.transaction.Action(func(conn database.DBConn) error {
+		err := ps.projectRepo.SaveProject(ctx, conn, pr)
+		if err != nil {
+			zap.L().Error("SaveProject Save error", zap.Error(err))
+			return errs.GrpcError(model.DBError)
+		}
+		pm := &pro.ProjectMember{
+			ProjectCode: pr.Id,
+			MemberCode:  msg.MemberId,
+			JoinTime:    time.Now().UnixMilli(),
+			IsOwner:     msg.MemberId,
+			Authorize:   "",
+		}
+		err = ps.projectRepo.SaveProjectMember(ctx, conn, pm)
+		if err != nil {
+			zap.L().Error("SaveProject SaveProjectMember error", zap.Error(err))
+			return errs.GrpcError(model.DBError)
+		}
+		code, _ := encrypts.EncryptInt64(pr.Id, model.AESKey)
+		organizationCodeStr, _ := encrypts.EncryptInt64(organizationCode, model.AESKey)
+		rsp = &project.ProjectSaveRespMessage{
+			Id:               pr.Id,
+			Code:             code,
+			OrganizationCode: organizationCodeStr,
+			Name:             pr.Name,
+			Cover:            pr.Cover,
+			CreateTime:       tms.FormatByMill(pr.CreateTime),
+			TaskBoardTheme:   pr.TaskBoardTheme,
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return rsp, nil
+}
+
+// ReadProject
+// 项目信息，是否收藏，姓名，拥有者头像
+func (p *ProjectService) ReadProject(c context.Context, msg *project.ProjectMessage) (*project.ProjectMessage, error) {
+	projectCodeStr, _ := encrypts.Decrypt(msg.ProjectCode, model.AESKey)
+	projectCode, _ := strconv.ParseInt(projectCodeStr, 10, 64)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	ctx = context.Background()
+	projectAndMember, err := p.projectRepo.FindProjectAndMember(ctx, projectCode, msg.MemberId)
+	if err != nil {
+		zap.L().Error("ReadProject FindProjectAndMember error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+	ownerId := projectAndMember.IsOwner
+	log.Println(ownerId)
+	collected, err := p.projectRepo.FindCollectByProjectCodeAndMemberId(ctx, projectCode, msg.MemberId)
+	if err != nil {
+		zap.L().Error("ReadProject FindCollectByProjectCodeAndMemberId error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	resp := &project.ProjectMessage{}
+	copier.Copy(resp, projectAndMember)
+	resp.OwnerAvatar = ""
+	if collected {
+		resp.Collected = 1
+	}
+
+	return resp, nil
 }

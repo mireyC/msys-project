@@ -9,7 +9,7 @@ type Project struct {
 	WhiteList          string  `json:"white_list"`
 	Order              int     `json:"order"`
 	Deleted            int     `json:"deleted"`
-	TemplateCode       string  `json:"template_code"`
+	TemplateCode       int     `json:"template_code"`
 	Schedule           float64 `json:"schedule"`
 	CreateTime         string  `json:"create_time"`
 	OrganizationCode   string  `json:"organization_code"`
@@ -26,6 +26,13 @@ type Project struct {
 	EndTime            int64   `json:"end_time"`
 	AutoUpdateSchedule int     `json:"auto_update_schedule"`
 	Code               string  `json:"code"`
+}
+
+type ProjectDetail struct {
+	Project
+	Collected   int    `json:"collected"`
+	OwnerName   string `json:"owner_name"`
+	OwnerAvatar string `json:"owner_avatar"`
 }
 
 type ProjectMember struct {
@@ -91,4 +98,22 @@ type ProjectTemplate struct {
 
 type TaskStagesOnlyName struct {
 	Name string `json:"name"`
+}
+
+type ProjectSaveReq struct {
+	Name         string `json:"name" form:"name"`
+	TemplateCode string `json:"templateCode" form:"templateCode"`
+	Description  string `json:"description" form:"description"`
+	Id           int    `json:"id" form:"id"`
+}
+
+type ProjectSaveResp struct {
+	CreateTime       string `json:"create_time"`
+	Code             string `json:"code"`
+	Name             string `json:"name"`
+	Description      string `json:"description"`
+	OrganizationCode string `json:"organizationCode"`
+	TaskBoardTheme   string `json:"taskBoardTheme"`
+	Cover            string `json:"cover"`
+	Id               int64  `json:"id"`
 }

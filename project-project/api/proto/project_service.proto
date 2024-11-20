@@ -49,7 +49,7 @@ message ProjectMessage {
   string BeginTime = 22;
   string EndTime = 23;
   int32 AutoUpdateSchedule = 24;
-  int64 ProjectCode = 25;
+  string ProjectCode = 25;
   int64 MemberCode = 26;
   string JoinTime  = 27;
   int64 IsOwner = 28;
@@ -57,6 +57,8 @@ message ProjectMessage {
   string code = 30;
   string ownerName = 31;
   int32 collected = 32;
+  string ownerAvatar = 33;
+  int32 MemberId = 34;
 }
 
 message IndexMessage {
@@ -109,8 +111,36 @@ message ProjectTemplateResp {
   int64  Total = 2;
 }
 
+message ProjectSaveRespMessage {
+  int64 Id = 1;
+  string Cover = 2;
+  string Name = 3;
+  string Description = 4;
+  string Code = 5;
+  string CreateTime = 6;
+  string TaskBoardTheme = 7;
+  string OrganizationCode = 8;
+}
+message ProjectSaveRpcMessage{
+  int64 memberId = 1;
+  string memberName = 2;
+  int64 page = 3;
+  int64 pageSize = 4;
+  string selectBy = 5;
+  string organizationCode = 6;
+  int32 viewType = 7;
+  string name = 8;
+  string templateCode = 9;
+  string description = 10;
+  int64 id = 11;
+}
+
+
+
 service ProjectService {
   rpc Index(IndexMessage) returns (IndexResponse) {}
   rpc FindProjectByMemId(ProjectRpcMessage) returns (ProjectRpcResponse) {}
   rpc FindProjectTemplateList(ProjectTemplateMessage) returns (ProjectTemplateResp) {}
+  rpc SaveProject(ProjectSaveRpcMessage) returns (ProjectSaveRespMessage){}
+  rpc ReadProject(ProjectMessage) returns (ProjectMessage){}
 }

@@ -1,7 +1,8 @@
 package model
 
-var (
-	Normal   = 1
-	Personal = 1
-	AESKey   = "abcfedgehjzabkmlkjjkkoew"
+const (
+	Normal         = 1
+	Personal int32 = 1
 )
+
+const AESKey = "abcfedgehjzabkmlkjjkkoew"

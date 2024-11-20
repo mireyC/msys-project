@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"mirey7/project-project/internal/data/pro"
+	"mirey7/project-project/internal/database"
 )
 
 type ProjectRepo interface {
@@ -11,4 +12,8 @@ type ProjectRepo interface {
 	FindProjectTemplateSystem(ctx context.Context, page int64, pageSize int64, system int) ([]*pro.ProjectTemplate, int64, error)
 	FindProjectTemplateCustom(ctx context.Context, page int64, pageSize int64, organizationId int64, memberId int64) ([]*pro.ProjectTemplate, int64, error)
 	FindProjectTemplateAll(ctx context.Context, page int64, pageSize int64, organizationId int64) ([]*pro.ProjectTemplate, int64, error)
+	SaveProject(ctx context.Context, conn database.DBConn, pr *pro.Project) error
+	SaveProjectMember(ctx context.Context, conn database.DBConn, pm *pro.ProjectMember) error
+	FindProjectAndMember(ctx context.Context, projectCode int64, memberId int32) (*pro.ProjectAndMember, error)
+	FindCollectByProjectCodeAndMemberId(ctx context.Context, projectCode int64, memberId int32) (bool, error)
 }

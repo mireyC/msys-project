@@ -16,7 +16,7 @@ type Project struct {
 	WhiteList          string
 	Sort               int
 	Deleted            int
-	TemplateCode       string
+	TemplateCode       int
 	Schedule           float64
 	CreateTime         int64
 	OrganizationCode   int64
@@ -58,6 +58,7 @@ type ProjectAndMember struct {
 	JoinTime    int64
 	IsOwner     int64
 	Authorize   string
+	TTT         string
 }
 
 func (m *ProjectAndMember) GetAccessControlType() string {
