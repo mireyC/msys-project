@@ -47,6 +47,7 @@ message MemberMessage {
   int32 area = 11;
   string email = 12;
   string code = 13;
+  string avatar = 14;
 }
 
 message OrganizationMessage {
@@ -72,9 +73,11 @@ message TokenMessage {
   int64 accessTokenExp = 4;
 }
 
+
 service LoginService {
   rpc Login(LoginMessage) returns (LoginResponse) {}
   rpc GetCaptcha(CaptchaMessage) returns (CaptchaResponse) {}
   rpc Register(RegisterMessage) returns (RegisterResponse) {}
   rpc TokenVerify(LoginMessage) returns (LoginResponse) {}
+  rpc GetMemberById(MemberMessage) returns (MemberMessage){}
 }

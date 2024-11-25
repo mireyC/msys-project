@@ -12,6 +12,43 @@ type ProjectDao struct {
 	conn database.DBConn
 }
 
+func (p *ProjectDao) ProjectEdit(ctx context.Context, project *pro.Project) error {
+	session := p.conn.Session(ctx)
+	sql := fmt.Sprintf("update ms_project set name=?, cover=?, description=? where id=?")
+	res := session.Exec(sql, project.Name, project.Cover, project.Description, project.Id)
+	return res.Error
+}
+
+func (p *ProjectDao) ProjectCollect(ctx context.Context, memberCode int64, projectCode int64, isCollect int32) error {
+	session := p.conn.Session(ctx)
+	sql := fmt.Sprintf("insert into ms_project_collection (project_code, member_code) values (?, ?)")
+	sql1 := fmt.Sprintf("delete from ms_project_collection where project_code=? and member_code=?")
+	if isCollect == 1 {
+		res := session.Exec(sql, projectCode, memberCode)
+		//res = session.Exec(fmt.Sprintf("update ms_project set is"))
+		return res.Error
+	} else {
+		res := session.Exec(sql1, projectCode, memberCode)
+		return res.Error
+	}
+
+	return nil
+}
+
+func (p *ProjectDao) DelProject(ctx context.Context, projectCode int64) error {
+	session := p.conn.Session(ctx)
+	sql := fmt.Sprintf("delete from ms_project where id=?")
+	res := session.Exec(sql, projectCode)
+	return res.Error
+}
+
+func (p *ProjectDao) UpdateDeleteProject(ctx context.Context, projectId int64, isDeleted int32) error {
+	session := p.conn.Session(ctx)
+	sql := fmt.Sprintf("update ms_project set deleted=? where id=?")
+	db := session.Exec(sql, isDeleted, projectId)
+	return db.Error
+}
+
 func (p *ProjectDao) FindCollectByProjectCodeAndMemberId(ctx context.Context, projectCode int64, memberId int32) (bool, error) {
 	session := p.conn.Session(ctx)
 	sql := fmt.Sprintf("select count(*) from ms_project_collection a where a.project_code=? and a.member_code=?")
@@ -25,8 +62,8 @@ func (p *ProjectDao) FindCollectByProjectCodeAndMemberId(ctx context.Context, pr
 func (p *ProjectDao) FindProjectAndMember(ctx context.Context, projectCode int64, memberId int32) (*pro.ProjectAndMember, error) {
 	session := p.conn.Session(ctx)
 
-	sql := fmt.Sprintf("select * from ms_project a, ms_project_member b where a.id=b.project_code and b.id=?")
-	db := session.Raw(sql, projectCode)
+	sql := fmt.Sprintf("select * from ms_project a, ms_project_member b where a.id=b.project_code and b.member_code=?")
+	db := session.Raw(sql, memberId)
 	var projectAndMember *pro.ProjectAndMember
 	err := db.Scan(&projectAndMember).Error
 	return projectAndMember, err

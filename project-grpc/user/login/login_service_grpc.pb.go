@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	LoginService_Login_FullMethodName       = "/login.service.v1.LoginService/Login"
-	LoginService_GetCaptcha_FullMethodName  = "/login.service.v1.LoginService/GetCaptcha"
-	LoginService_Register_FullMethodName    = "/login.service.v1.LoginService/Register"
-	LoginService_TokenVerify_FullMethodName = "/login.service.v1.LoginService/TokenVerify"
+	LoginService_Login_FullMethodName         = "/login.service.v1.LoginService/Login"
+	LoginService_GetCaptcha_FullMethodName    = "/login.service.v1.LoginService/GetCaptcha"
+	LoginService_Register_FullMethodName      = "/login.service.v1.LoginService/Register"
+	LoginService_TokenVerify_FullMethodName   = "/login.service.v1.LoginService/TokenVerify"
+	LoginService_GetMemberById_FullMethodName = "/login.service.v1.LoginService/GetMemberById"
 )
 
 // LoginServiceClient is the client API for LoginService service.
@@ -33,6 +34,7 @@ type LoginServiceClient interface {
 	GetCaptcha(ctx context.Context, in *CaptchaMessage, opts ...grpc.CallOption) (*CaptchaResponse, error)
 	Register(ctx context.Context, in *RegisterMessage, opts ...grpc.CallOption) (*RegisterResponse, error)
 	TokenVerify(ctx context.Context, in *LoginMessage, opts ...grpc.CallOption) (*LoginResponse, error)
+	GetMemberById(ctx context.Context, in *MemberMessage, opts ...grpc.CallOption) (*MemberMessage, error)
 }
 
 type loginServiceClient struct {
@@ -83,6 +85,16 @@ func (c *loginServiceClient) TokenVerify(ctx context.Context, in *LoginMessage, 
 	return out, nil
 }
 
+func (c *loginServiceClient) GetMemberById(ctx context.Context, in *MemberMessage, opts ...grpc.CallOption) (*MemberMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MemberMessage)
+	err := c.cc.Invoke(ctx, LoginService_GetMemberById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LoginServiceServer is the server API for LoginService service.
 // All implementations must embed UnimplementedLoginServiceServer
 // for forward compatibility
@@ -91,6 +103,7 @@ type LoginServiceServer interface {
 	GetCaptcha(context.Context, *CaptchaMessage) (*CaptchaResponse, error)
 	Register(context.Context, *RegisterMessage) (*RegisterResponse, error)
 	TokenVerify(context.Context, *LoginMessage) (*LoginResponse, error)
+	GetMemberById(context.Context, *MemberMessage) (*MemberMessage, error)
 	mustEmbedUnimplementedLoginServiceServer()
 }
 
@@ -109,6 +122,9 @@ func (UnimplementedLoginServiceServer) Register(context.Context, *RegisterMessag
 }
 func (UnimplementedLoginServiceServer) TokenVerify(context.Context, *LoginMessage) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TokenVerify not implemented")
+}
+func (UnimplementedLoginServiceServer) GetMemberById(context.Context, *MemberMessage) (*MemberMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMemberById not implemented")
 }
 func (UnimplementedLoginServiceServer) mustEmbedUnimplementedLoginServiceServer() {}
 
@@ -195,6 +211,24 @@ func _LoginService_TokenVerify_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LoginService_GetMemberById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MemberMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginServiceServer).GetMemberById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LoginService_GetMemberById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginServiceServer).GetMemberById(ctx, req.(*MemberMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LoginService_ServiceDesc is the grpc.ServiceDesc for LoginService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +251,10 @@ var LoginService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TokenVerify",
 			Handler:    _LoginService_TokenVerify_Handler,
+		},
+		{
+			MethodName: "GetMemberById",
+			Handler:    _LoginService_GetMemberById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

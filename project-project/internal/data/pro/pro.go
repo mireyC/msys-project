@@ -32,6 +32,7 @@ type Project struct {
 	BeginTime          int64
 	EndTime            int64
 	AutoUpdateSchedule int
+	ProjectCode        string
 }
 
 func (*Project) TableName() string {
@@ -51,6 +52,15 @@ func (*ProjectMember) TableName() string {
 	return "ms_project_member"
 }
 
+func ToProjectIds(list []*ProjectAndMember) []int64 {
+	var ids []int64
+	for _, v := range list {
+		ids = append(ids, v.ProjectCode)
+	}
+
+	return ids
+}
+
 type ProjectAndMember struct {
 	Project
 	ProjectCode int64
@@ -58,7 +68,7 @@ type ProjectAndMember struct {
 	JoinTime    int64
 	IsOwner     int64
 	Authorize   string
-	TTT         string
+	//TTT         string
 }
 
 func (m *ProjectAndMember) GetAccessControlType() string {

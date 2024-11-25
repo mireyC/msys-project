@@ -59,6 +59,9 @@ message ProjectMessage {
   int32 collected = 32;
   string ownerAvatar = 33;
   int32 MemberId = 34;
+  int32 isDeleted = 35;
+  int32 isCollected = 36;
+//  string projectCode = 37;
 }
 
 message IndexMessage {
@@ -143,4 +146,8 @@ service ProjectService {
   rpc FindProjectTemplateList(ProjectTemplateMessage) returns (ProjectTemplateResp) {}
   rpc SaveProject(ProjectSaveRpcMessage) returns (ProjectSaveRespMessage){}
   rpc ReadProject(ProjectMessage) returns (ProjectMessage){}
+  rpc UpdateDeleteProject(ProjectMessage) returns(ProjectMessage) {}
+  rpc DelProject(ProjectMessage) returns(ProjectMessage){}
+  rpc ProjectCollect(ProjectMessage) returns(ProjectMessage){}
+  rpc ProjectEdit(ProjectMessage) returns(ProjectMessage){}
 }

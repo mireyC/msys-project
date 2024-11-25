@@ -9,6 +9,8 @@ import (
 	"mirey7/project-common/errs"
 	"mirey7/project-common/tms"
 	"mirey7/project-grpc/project"
+	"mirey7/project-grpc/user/login"
+	"mirey7/project-project/client"
 	"mirey7/project-project/internal/data/menu"
 	"mirey7/project-project/internal/data/pro"
 	"mirey7/project-project/internal/data/task"
@@ -73,7 +75,7 @@ func (p *ProjectService) FindProjectByMemId(ctx context.Context, msg *project.Pr
 	var total int64
 	var err error
 	if selectBy == "" || selectBy == "my" {
-		proList, total, err = p.projectRepo.FindProjectByMemId(context.Background(), memberId, page, pageSize, "")
+		proList, total, err = p.projectRepo.FindProjectByMemId(context.Background(), memberId, page, pageSize, "and deleted = 0 ")
 		if err != nil {
 			zap.L().Error("project FindProjectByMemId db error", zap.Error(err))
 			return nil, errs.GrpcError(model.DBError)
@@ -105,18 +107,30 @@ func (p *ProjectService) FindProjectByMemId(ctx context.Context, msg *project.Pr
 	if proList == nil {
 		return &project.ProjectRpcResponse{Pm: []*project.ProjectMessage{}, Total: total}, nil
 	}
+
 	var pm []*project.ProjectMessage
 	pam := pro.ToMap(proList)
 	copier.Copy(&pm, proList)
-	for _, v := range pm {
-		v.Code, _ = encrypts.EncryptInt64(v.Id, model.AESKey)
 
+	for i, v := range pm {
+		v.Code, _ = encrypts.EncryptInt64(proList[i].ProjectCode, model.AESKey)
+		v.ProjectCode, _ = encrypts.EncryptInt64(proList[i].ProjectCode, model.AESKey)
 		v.AccessControlType = pam[v.Id].GetAccessControlType()
 		v.OrganizationCode, _ = encrypts.EncryptInt64(pam[v.Id].OrganizationCode, model.AESKey)
 		v.JoinTime = tms.FormatByMill(pam[v.Id].JoinTime)
 		v.OwnerName = msg.MemberName
 		v.Order = int32(pam[v.Id].Sort)
 		v.CreateTime = tms.FormatByMill(pam[v.Id].CreateTime)
+	}
+
+	collectList, _, _ := p.projectRepo.FindCollectProjectByMenId(ctx, memberId, page, pageSize)
+	for i := 0; i < len(pm); i++ {
+		for j := 0; j < len(collectList); j++ {
+			code, _ := encrypts.EncryptInt64(collectList[j].Id, model.AESKey)
+			if pm[i].Code == code {
+				pm[i].Collected = 1
+			}
+		}
 	}
 
 	return &project.ProjectRpcResponse{Pm: pm, Total: total}, nil
@@ -231,6 +245,8 @@ func (ps *ProjectService) SaveProject(ctx context.Context, msg *project.ProjectS
 // ReadProject
 // 项目信息，是否收藏，姓名，拥有者头像
 func (p *ProjectService) ReadProject(c context.Context, msg *project.ProjectMessage) (*project.ProjectMessage, error) {
+	resp := &project.ProjectMessage{}
+
 	projectCodeStr, _ := encrypts.Decrypt(msg.ProjectCode, model.AESKey)
 	projectCode, _ := strconv.ParseInt(projectCodeStr, 10, 64)
 
@@ -242,20 +258,91 @@ func (p *ProjectService) ReadProject(c context.Context, msg *project.ProjectMess
 		zap.L().Error("ReadProject FindProjectAndMember error", zap.Error(err))
 		return nil, errs.GrpcError(model.DBError)
 	}
+	if projectAndMember == nil {
+
+	}
 	ownerId := projectAndMember.IsOwner
 	log.Println(ownerId)
+	rpcMsg := &login.MemberMessage{Id: ownerId}
+	ownerUserInfo, err := client.UserSvcClient.GetMemberById(ctx, rpcMsg)
+	if err != nil {
+		zap.L().Error("ReadProject GetMemberById error", zap.Error(err))
+		return nil, errs.GrpcError(errs.NewError(500, err.Error()))
+	}
+
 	collected, err := p.projectRepo.FindCollectByProjectCodeAndMemberId(ctx, projectCode, msg.MemberId)
 	if err != nil {
 		zap.L().Error("ReadProject FindCollectByProjectCodeAndMemberId error", zap.Error(err))
 		return nil, errs.GrpcError(model.DBError)
 	}
 
-	resp := &project.ProjectMessage{}
 	copier.Copy(resp, projectAndMember)
-	resp.OwnerAvatar = ""
+	resp.OwnerAvatar = ownerUserInfo.Avatar
+	resp.OwnerName = ownerUserInfo.Name
 	if collected {
 		resp.Collected = 1
 	}
 
 	return resp, nil
+}
+
+func (p *ProjectService) UpdateDeleteProject(c context.Context, msg *project.ProjectMessage) (*project.ProjectMessage, error) {
+	projectId := msg.Id
+	isDeleted := msg.IsDeleted
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err := p.projectRepo.UpdateDeleteProject(ctx, projectId, isDeleted)
+	if err != nil {
+		zap.L().Error("UpdateDeleteProject error", zap.Error(err))
+		return &project.ProjectMessage{}, errs.GrpcError(model.DBError)
+	}
+
+	return &project.ProjectMessage{}, nil
+}
+
+func (p *ProjectService) DelProject(c context.Context, msg *project.ProjectMessage) (*project.ProjectMessage, error) {
+	projectCode := msg.Id
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err := p.projectRepo.DelProject(ctx, projectCode)
+	if err != nil {
+		zap.L().Error("DelProject DelProject error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	return nil, err
+}
+
+func (p *ProjectService) ProjectCollect(c context.Context, msg *project.ProjectMessage) (*project.ProjectMessage, error) {
+	isCollect := msg.IsCollected
+	projectCode, _ := strconv.ParseInt(msg.ProjectCode, 10, 64)
+	memberCode := msg.MemberCode
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err := p.projectRepo.ProjectCollect(ctx, memberCode, projectCode, isCollect)
+	if err != nil {
+		zap.L().Error("ProjectCollect ProjectCollect error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	return nil, err
+}
+
+func (p *ProjectService) ProjectEdit(c context.Context, msg *project.ProjectMessage) (*project.ProjectMessage, error) {
+
+	projectMsg := &pro.Project{}
+	copier.Copy(projectMsg, msg)
+
+	projectMsg.Id, _ = encrypts.DecryptToInt64(msg.ProjectCode, model.AESKey)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	err := p.projectRepo.ProjectEdit(ctx, projectMsg)
+	if err != nil {
+		zap.L().Error("ProjectEdit ProjectEdit error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	return &project.ProjectMessage{}, err
 }

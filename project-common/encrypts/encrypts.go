@@ -21,6 +21,7 @@ func EncryptInt64(id int64, keyText string) (cipherStr string, err error) {
 	idStr := strconv.FormatInt(id, 10)
 	return Encrypt(idStr, keyText)
 }
+
 func Encrypt(plainText string, keyText string) (cipherStr string, err error) {
 	// 转换成字节数据, 方便加密
 	plainByte := []byte(plainText)
@@ -52,4 +53,9 @@ func Decrypt(cipherStr string, keyText string) (plainText string, err error) {
 	cfbdec.XORKeyStream(plainByte, cipherByte)
 	plainText = string(plainByte)
 	return
+}
+
+func DecryptToInt64(cipherStr string, keyText string) (int64, error) {
+	decryptStr, _ := Decrypt(cipherStr, keyText)
+	return strconv.ParseInt(decryptStr, 10, 64)
 }

@@ -7,9 +7,11 @@ import (
 	"mirey7/project-api/pkg/model"
 	"mirey7/project-api/pkg/model/pro"
 	common "mirey7/project-common"
+	"mirey7/project-common/encrypts"
 	"mirey7/project-common/errs"
 	"mirey7/project-grpc/project"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -145,7 +147,111 @@ func (p *HandlerProject) projectRead(c *gin.Context) {
 
 	resp := &pro.ProjectDetail{}
 	copier.Copy(resp, res)
+	resp.Code = projectCode
 	c.JSON(http.StatusOK, result.Success(resp))
+}
+
+func (p *HandlerProject) projectRecycle(c *gin.Context) {
+	result := &common.Result{}
+	idmsg := c.PostForm("projectCode")
+	projectCodeStr, _ := encrypts.Decrypt(idmsg, model.AESKey)
+	projectCode, _ := strconv.ParseInt(projectCodeStr, 10, 64)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectSvcClient.UpdateDeleteProject(ctx, &project.ProjectMessage{Id: projectCode, IsDeleted: 1})
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+
+	c.JSON(http.StatusOK, result.Success([]int{}))
+	return
+}
+
+func (p *HandlerProject) delProject(c *gin.Context) {
+	result := &common.Result{}
+	projectCodeStr, _ := encrypts.Decrypt(c.PostForm("projectCode"), model.AESKey)
+	projectCode, _ := strconv.ParseInt(projectCodeStr, 10, 64)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectSvcClient.DelProject(ctx, &project.ProjectMessage{Id: projectCode})
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+
+	c.JSON(http.StatusOK, result.Success([]int{}))
+}
+
+func (p *HandlerProject) projectCollect(c *gin.Context) {
+	result := &common.Result{}
+
+	memberId := c.GetInt64("memberId")
+	projectCodeStr, _ := encrypts.Decrypt(c.PostForm("projectCode"), model.AESKey)
+	//projectCode, _ := strconv.ParseInt(projectCodeStr, 10, 64)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	collteType := c.PostForm("type")
+	var colleted int32
+	if collteType == "collect" {
+		colleted = 1
+	} else {
+		colleted = 0
+	}
+	msg := &project.ProjectMessage{MemberCode: memberId, ProjectCode: projectCodeStr, IsCollected: colleted}
+	_, err := ProjectSvcClient.ProjectCollect(ctx, msg)
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+
+	c.JSON(http.StatusOK, result.Success([]int{}))
+}
+
+func (p *HandlerProject) projectRecovery(c *gin.Context) {
+	result := &common.Result{}
+	projectCodestr, _ := encrypts.Decrypt(c.PostForm("projectCode"), model.AESKey)
+	projectCode, _ := strconv.ParseInt(projectCodestr, 10, 64)
+
+	msg := &project.ProjectMessage{
+		Id:        projectCode,
+		IsDeleted: 0,
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectSvcClient.UpdateDeleteProject(ctx, msg)
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+
+	c.JSON(http.StatusOK, result.Success([]int{}))
+}
+
+func (p *HandlerProject) projectEdit(c *gin.Context) {
+	result := &common.Result{}
+	req := &pro.Project{}
+	_ = c.ShouldBind(req)
+
+	msg := &project.ProjectMessage{}
+	copier.Copy(msg, req)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectSvcClient.ProjectEdit(ctx, msg)
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+
+	c.JSON(http.StatusOK, result.Success([]int{}))
 }
 
 func New() *HandlerProject {

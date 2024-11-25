@@ -256,3 +256,44 @@
 {"level":"ERROR","time":"2024-11-21T05:21:27.850+0800","caller":"project.service.v1/project_service.go:241","msg":"ReadProject FindProjectAndMember error","error":"Error 1054 (42S22): Unknown column 'b.owner_id' in 'where clause'"}
 {"level":"ERROR","time":"2024-11-21T05:28:14.635+0800","caller":"project.service.v1/project_service.go:241","msg":"ReadProject FindProjectAndMember error","error":"context deadline exceeded"}
 {"level":"ERROR","time":"2024-11-21T05:32:15.189+0800","caller":"project.service.v1/project_service.go:241","msg":"ReadProject FindProjectAndMember error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-22T02:15:46.040+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:46.048+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:50.041+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:50.042+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:53.888+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:54.347+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:58.522+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T02:15:58.523+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-22T03:17:28.003+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-22T03:17:28.008+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T01:53:09.013+0800","caller":"login.service.v1/login_service.go:228","msg":"TokenVerify ParseToken err","error":"Token is expired"}
+{"level":"ERROR","time":"2024-11-24T04:29:14.958+0800","caller":"project.service.v1/project_service.go:285","msg":"UpdateDeleteProject error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-24T04:56:44.277+0800","caller":"project.service.v1/project_service.go:147","msg":"project FindProjectTemplateList db error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-24T05:59:55.237+0800","caller":"project.service.v1/project_service.go:159","msg":"project FindProjectTemplateList FindTaskByIds error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-24T06:03:04.808+0800","caller":"project.service.v1/project_service.go:159","msg":"project FindProjectTemplateList FindTaskByIds error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-24T06:05:12.254+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:05:12.256+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:06:22.789+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:06:22.790+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:09:51.218+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:09:51.219+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:09:58.650+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:09:58.651+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:10:08.386+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:10:08.387+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:10:20.867+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:10:20.868+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:12:22.660+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:12:22.662+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:12:31.407+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:12:31.419+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:13:29.672+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:13:29.673+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:15:03.876+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:15:03.877+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T06:17:44.068+0800","caller":"project.service.v1/project_service.go:246","msg":"ReadProject FindProjectAndMember error","error":"Error 1054 (42S22): Unknown column 'b.member_id' in 'where clause'"}
+{"level":"ERROR","time":"2024-11-24T06:25:28.646+0800","caller":"login.service.v1/login_service.go:271","msg":"GetMemberById FindMemberById err, ","error":"record not found"}
+{"level":"ERROR","time":"2024-11-24T06:25:28.671+0800","caller":"project.service.v1/project_service.go:257","msg":"ReadProject GetMemberById error","error":"rpc error: code = Code(998) desc = DB 错误"}
+{"level":"ERROR","time":"2024-11-24T23:15:38.375+0800","caller":"project.service.v1/project_service.go:343","msg":"ProjectEdit ProjectEdit error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-24T23:22:58.859+0800","caller":"project.service.v1/project_service.go:343","msg":"ProjectEdit ProjectEdit error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2024-11-24T23:23:31.388+0800","caller":"project.service.v1/project_service.go:343","msg":"ProjectEdit ProjectEdit error","error":"context deadline exceeded"}

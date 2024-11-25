@@ -20,6 +20,7 @@ grpc:
   name: "project"
   port: ":8882"
   weight: 10
+  userService: "user"
 
 
 etcd:

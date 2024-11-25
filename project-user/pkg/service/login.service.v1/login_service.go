@@ -2,6 +2,7 @@ package login_service_v1
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/go-redis/redis/v8"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
@@ -166,10 +167,10 @@ func (ls *LoginService) GetCaptcha(ctx context.Context, msg *login.CaptchaMessag
 
 func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*login.LoginResponse, error) {
 	c := context.Background()
-	log.Println("Login password", msg.Password)
+	//log.Println("Login password", msg.Password)
 	// 1.去数据库查询 账号密码是否正确
 	pwd := encrypts.Md5(msg.Password)
-	log.Println("Login password", pwd)
+	//log.Println("Login password", pwd)
 	mem, err := ls.memberRepo.FindMember(c, msg.Account, pwd)
 	if err != nil {
 		zap.L().Error("Login db FindMember error", zap.Error(err))
@@ -211,6 +212,17 @@ func (ls *LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*lo
 		AccessTokenExp: token.AccessExp,
 	}
 
+	go func() {
+		memJson, _ := json.Marshal(mem)
+		c, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		ls.cacheRepo.Put(c, model.Member+"::"+memIdStr, string(memJson), exp)
+		log.Println("string(memJson): ", string(memJson))
+		orgsJson, _ := json.Marshal(orgs)
+		ls.cacheRepo.Put(c, model.MemberOrganization+"::"+memIdStr, string(orgsJson), exp)
+		log.Println("string(orgsJson): ", string(orgsJson))
+	}()
+
 	return &login.LoginResponse{
 		Member:           memMsg,
 		OrganizationList: orgsMessage,
@@ -228,28 +240,37 @@ func (ls *LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage
 		zap.L().Error("TokenVerify ParseToken err", zap.Error(err))
 		return nil, errs.GrpcError(model.NoLogin)
 	}
-	memId, err := strconv.ParseInt(parseToken, 10, 64)
-	if err != nil {
-		zap.L().Error("TokenVerify ParseInt err", zap.Error(err))
-		return nil, errs.GrpcError(model.NoLogin)
-	}
+	//memId, err := strconv.ParseInt(parseToken, 10, 64)
+	//if err != nil {
+	//	zap.L().Error("TokenVerify ParseInt err", zap.Error(err))
+	//	return nil, errs.GrpcError(model.NoLogin)
+	//}
 	c := context.Background()
-	mem, err := ls.memberRepo.FindMemberById(c, memId)
+	memJson, err := ls.cacheRepo.Get(c, model.Member+"::"+parseToken)
 	if err != nil {
-		zap.L().Error("Login db FindMemberById error", zap.Error(err))
-		return nil, errs.GrpcError(model.DBError)
-	}
-	if mem == nil {
-		zap.L().Error("TokenVerify member is nil")
+		zap.L().Error("Login cacheRepo Member::parseToken error", zap.Error(err))
 		return nil, errs.GrpcError(model.NoLogin)
 	}
+	if memJson == "" {
+		zap.L().Error("Login cacheRepo Member::parseToken expire", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	mem := &member.Member{}
+	json.Unmarshal([]byte(memJson), mem)
 
 	// 2.根据用户id 查询组织
-	orgs, err := ls.organizationRepo.FindOrganizationByMenId(c, mem.Id)
+	orgsJson, err := ls.cacheRepo.Get(c, model.MemberOrganization+"::"+parseToken)
 	if err != nil {
-		zap.L().Error("Login db FindMember error", zap.Error(err))
-		return nil, errs.GrpcError(model.DBError)
+		zap.L().Error("Login cacheRepo MemberOrganization::parseToken error", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
 	}
+	if orgsJson == "" {
+		zap.L().Error("Login cacheRepo MemberOrganization::parseToken expire", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	orgs := []*organization.Organization{}
+	json.Unmarshal([]byte(orgsJson), &orgs)
+
 	var orgsMessage []*login.OrganizationMessage
 	orgMap := organization.ToMap(orgs)
 	err = copier.Copy(&orgsMessage, orgs)
@@ -262,4 +283,17 @@ func (ls *LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage
 	memMsg := &login.MemberMessage{}
 	_ = copier.Copy(memMsg, mem)
 	return &login.LoginResponse{Member: memMsg, OrganizationList: orgsMessage}, nil
+}
+
+func (ls *LoginService) GetMemberById(ctx context.Context, msg *login.MemberMessage) (*login.MemberMessage, error) {
+	id := msg.Id
+	mem, err := ls.memberRepo.FindMemberById(ctx, id)
+	if err != nil {
+		zap.L().Error("GetMemberById FindMemberById err, ", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+
+	resp := &login.MemberMessage{}
+	copier.Copy(resp, mem)
+	return resp, nil
 }

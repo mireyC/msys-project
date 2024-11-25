@@ -1,6 +1,9 @@
 package main
 
-import "mirey7/project-project/router"
+import (
+	"mirey7/project-project/client"
+	"mirey7/project-project/router"
+)
 
 func main() {
 	//r := gin.Default()
@@ -13,5 +16,6 @@ func main() {
 	//}
 
 	//srv.Run(r, config.C.SC.Name, config.C.SC.Addr, stop)
+	client.InitUserSvcClient()
 	router.ServerRegisterAndRun()
 }

@@ -52,10 +52,11 @@ type ServerConfig struct {
 }
 
 type GrpcConfig struct {
-	Name   string
-	Addr   string
-	Port   string
-	Weight int64
+	Name        string
+	Addr        string
+	Port        string
+	Weight      int64
+	UserService string
 }
 
 func InitConfig() *Config {
@@ -166,6 +167,7 @@ func (c *Config) ReadGrpcConfig() {
 	gc.Port = c.viper.GetString("grpc.port")
 	log.Printf("grpc addr: %v", gc.Addr)
 	gc.Weight = c.viper.GetInt64("grpc.weight")
+	gc.UserService = c.viper.GetString("grpc.userService")
 	c.GC = gc
 }
 
